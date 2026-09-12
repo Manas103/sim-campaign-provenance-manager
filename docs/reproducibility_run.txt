@@ -1,0 +1,6 @@
+cases: 40
+reps per case: 30
+total runs executed: 1200
+bit-for-bit matched: 1200 / 1200
+distinct case output hashes: 40 (of 40 cases)
+no mismatches

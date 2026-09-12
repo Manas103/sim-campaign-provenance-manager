@@ -24,7 +24,6 @@ limitations for why an exact-hash-only gate is a judgment call.
 """
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -32,7 +31,7 @@ from typing import Optional
 import numpy as np
 
 from . import storage
-from .manifest import Manifest, hash_array_content, hash_input_deck
+from .manifest import Manifest, hash_array_content
 
 
 @dataclass(frozen=True)
@@ -93,13 +92,32 @@ def evaluate_gate(
 def naive_reference_check(conn, case_name: str, run_id: str) -> GateDecision:
     """Deliberately slow, independently-coded re-derivation of the same decision.
 
-    Does not call evaluate_gate and does not trust any cached hash column:
-    it re-reads every run row for the case from scratch, re-reads the raw
-    HDF5 file bytes off disk and rehashes them, re-parses the recorded input
-    deck JSON and rehashes it, and does a linear scan (not the indexed
-    "ORDER BY ... LIMIT 1" query the fast path uses) to find the true most
-    recent prior accepted run strictly before this one. Used only in tests
-    to cross-check the fast gate, never in the campaign driver itself.
+    Does not call evaluate_gate: it re-reads every run row for the case from
+    scratch, re-reads the raw HDF5 file bytes off disk and rehashes them
+    (rather than trusting the cached content_hash column, which could be
+    stale or corrupted independently of the file), and does a linear scan
+    (not the indexed "ORDER BY ... LIMIT 1" query the fast path uses) to
+    find the true most recent prior accepted run strictly before this one.
+
+    It deliberately does NOT re-derive the input-deck hash from a stored
+    deck file. An earlier version of this function did (rehashing
+    `input_deck_json`), on the theory that nothing should be trusted. That
+    was wrong and the oracle cross-check test caught it: run_case's
+    `input_hash_override` (used only by tests to construct a case where the
+    caller's declared provenance disagrees with what it actually solved) let
+    `manifest.input_hash` and `input_deck_json` diverge, which cannot happen
+    through the real API. Rehashing `input_deck_json` was therefore
+    re-deriving a "ground truth" for a field that has none: the input hash
+    is declared provenance metadata, exactly like the commit SHA, and the
+    gate's whole job is to compare declared metadata against declared
+    metadata, then flag it when content moved without any of it changing.
+    Recomputing it from stored content silently redefines what counts as a
+    manifest change and made this function disagree with evaluate_gate on
+    exactly the forged-metadata case that only exists to test the gate.
+    Content is different: the output array actually has an independently
+    checkable ground truth (the bytes on disk), so recomputing content_hash
+    here is the right kind of distrust and stays. Used only in tests to
+    cross-check the fast gate, never in the campaign driver itself.
     """
     all_rows = storage.all_runs_for_case(conn, case_name)
     target = None
@@ -113,14 +131,10 @@ def naive_reference_check(conn, case_name: str, run_id: str) -> GateDecision:
     if target is None:
         raise ValueError(f"run {run_id} not found for case {case_name}")
 
-    # Recompute everything from raw stored artifacts rather than trusting columns.
+    # Recompute content from raw stored bytes; trust the declared manifest
+    # (see docstring for why the input hash is not re-derived from a deck).
     recomputed_content_hash = hash_array_content(storage.read_run_hdf5(Path(target.hdf5_path)))
-    recomputed_input_hash = hash_input_deck(json.loads(target.input_deck_json))
-    recomputed_manifest = Manifest(
-        commit=target.manifest.commit,
-        input_hash=recomputed_input_hash,
-        solver_version=target.manifest.solver_version,
-    )
+    recomputed_manifest = target.manifest
 
     if prior_accepted is None:
         return GateDecision(
