@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+venv/
+.pytest_cache/
+*.log
+
+# Generated run artifacts (SQLite store, per-run HDF5 files). Regenerate with:
+#   venv\Scripts\python.exe scripts\generate_example_campaign.py
+data/runs/*.h5
+data/*.sqlite
+*.sqlite
+
+# Keep the small set of example rendered PNGs used in the README/docs.
+data/plots/*.png
+!data/plots/example_*.png
