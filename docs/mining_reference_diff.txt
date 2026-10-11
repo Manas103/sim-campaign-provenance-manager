@@ -1,0 +1,18 @@
+Reference-oracle cross-check: mine_frames.cpp vs. mining/reference_miner.py
+(independent pure-numpy implementation, no shared code beyond the binary
+file format in mining/corpus_format.py).
+
+Small corpus (10,015 frames, 20 segments, 5 queries, 15 seeded near-dups):
+  $ diff <(sort cpp_out.csv) <(sort ref_out.csv)
+  IDENTICAL
+
+Full corpus (2,000,060 frames, 400 segments, 20 queries, 60 seeded near-dups):
+  $ diff <(sort data/mining/cpp_out.csv) <(sort data/mining/ref_out.csv)
+  FULL_SCALE_IDENTICAL
+
+Timings (WSL2 Ubuntu 22.04, g++ 11.4 -O2, Python 3.10.12 + numpy 2.2.6):
+  mine_frames (C++, full 2,000,060-frame corpus, 20 queries): 1.590s real
+  reference_miner.py (pure numpy, same corpus and queries):    6m20.8s real
+
+The ~240x gap is the point of building the C++ miner at all: the reference
+oracle exists to prove correctness, not to run at the corpus's real scale.

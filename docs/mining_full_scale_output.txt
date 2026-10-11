@@ -1,0 +1,15 @@
+{
+  "corpus_frames": 2000060,
+  "candidates_recalled": 119383,
+  "kept_after_dedup": 119323,
+  "seeded_duplicates_total": 60,
+  "seeded_duplicates_suppressed": 60,
+  "seeded_duplicates_missed": 0,
+  "control_frames_total": 60,
+  "control_frames_falsely_suppressed": 0,
+  "frames_with_resolvable_lineage": 119323,
+  "frames_total_checked": 119323,
+  "gate_decision": "first_run_for_case",
+  "gate_accepted": true,
+  "wall_seconds": 1.158
+}

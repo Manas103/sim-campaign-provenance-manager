@@ -1,0 +1,32 @@
+Re-verification that the mining/ extension did not change any of the
+original toy-solver campaign numbers (Windows 11 native venv, Python
+3.12.10, same machine/toolchain the original README states).
+
+$ venv\Scripts\python.exe -m pytest tests\ -q --ignore=tests\test_mining.py
+.....................................                                    [100%]
+37 passed in 10.99s
+
+$ venv\Scripts\python.exe scripts\reproducibility_check.py
+cases: 40
+reps per case: 30
+total runs executed: 1200
+bit-for-bit matched: 1200 / 1200
+distinct case output hashes: 40 (of 40 cases)
+no mismatches
+
+$ venv\Scripts\python.exe scripts\drift_detection_check.py
+seeded drift scenarios: 30
+caught: 30 / 30
+all seeded scenarios caught
+
+$ venv\Scripts\python.exe scripts\false_flag_sweep.py
+clean campaigns: 200
+total runs executed: 400
+false drift flags: 0 / 200
+no false flags
+
+All four numbers (37 tests, 1200/1200, 30/30, 0/200) match the README
+exactly. The mining/ extension (C++ miner, corpus generation, pipeline,
+its own 5-test pytest module) runs separately via WSL2 Ubuntu 22.04's
+system python3 3.10.12 + g++ 11.4, since mine_frames.cpp is a Linux ELF
+binary; see docs/mining_pytest_output.txt.

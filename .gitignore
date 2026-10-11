@@ -13,3 +13,10 @@ data/*.sqlite
 # Keep the small set of example rendered PNGs used in the README/docs.
 data/plots/*.png
 !data/plots/example_*.png
+
+# mining/ extension: the compiled miner and the generated 2,000,000-frame
+# corpus/queries/ground-truth/run artifacts. Regenerate with:
+#   mining/build.sh && python3 mining/generate_corpus.py --seed 7 --out-dir data/mining
+mining/mine_frames
+data/mining/
+data/mining_small/

@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-6.2.5, py-1.10.0, pluggy-0.13.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/manas/build/sim-campaign-provenance-manager, configfile: pytest.ini
+plugins: colcon-core-0.21.0, cov-3.0.0
+collecting ... collected 5 items
+
+tests/test_mining.py::test_cpp_miner_matches_independent_reference_exactly PASSED [ 20%]
+tests/test_mining.py::test_seeded_near_duplicates_all_suppressed_with_zero_false_suppressions PASSED [ 40%]
+tests/test_mining.py::test_every_selected_frame_traces_to_a_log_segment PASSED [ 60%]
+tests/test_mining.py::test_gate_accepts_first_run_and_identical_rerun PASSED [ 80%]
+tests/test_mining.py::test_gate_refuses_unexplained_drift PASSED         [100%]
+
+============================== 5 passed in 0.80s ===============================
