@@ -1,0 +1,43 @@
+Running main() from /mnt/c/Users/Manas/Downloads/Auto Job Applier/Total Job Application process flow/projects/sim-campaign-provenance-manager/approach_comparison/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 14 tests from 3 test suites.
+[----------] Global test environment set-up.
+[----------] 8 tests from Classify
+[ RUN      ] Classify.HardBrakeFiresOnSustainedDecel
+[       OK ] Classify.HardBrakeFiresOnSustainedDecel (0 ms)
+[ RUN      ] Classify.HighAccelerationFiresOnSustainedAccel
+[       OK ] Classify.HighAccelerationFiresOnSustainedAccel (0 ms)
+[ RUN      ] Classify.CyclistVehicleCloseApproachNeedsTightDistanceAndHeading
+[       OK ] Classify.CyclistVehicleCloseApproachNeedsTightDistanceAndHeading (0 ms)
+[ RUN      ] Classify.CloseProximityCatchesWhatTheTighterCyclistGateMisses
+[       OK ] Classify.CloseProximityCatchesWhatTheTighterCyclistGateMisses (0 ms)
+[ RUN      ] Classify.CrossingPathsVsUnprotectedLeftSplitByRelativeSpeed
+[       OK ] Classify.CrossingPathsVsUnprotectedLeftSplitByRelativeSpeed (0 ms)
+[ RUN      ] Classify.CutInNeedsClosingRelativeSpeed
+[       OK ] Classify.CutInNeedsClosingRelativeSpeed (0 ms)
+[ RUN      ] Classify.LaneChangeFiresOnModestLateralSignature
+[       OK ] Classify.LaneChangeFiresOnModestLateralSignature (0 ms)
+[ RUN      ] Classify.FarAwaySlowRowIsNone
+[       OK ] Classify.FarAwaySlowRowIsNone (0 ms)
+[----------] 8 tests from Classify (0 ms total)
+
+[----------] 2 tests from Mutation
+[ RUN      ] Mutation.PerturbsOnlyTheTargetedField
+[       OK ] Mutation.PerturbsOnlyTheTargetedField (0 ms)
+[ RUN      ] Mutation.EveryFieldHasANonZeroDelta
+[       OK ] Mutation.EveryFieldHasANonZeroDelta (0 ms)
+[----------] 2 tests from Mutation (0 ms total)
+
+[----------] 4 tests from RegressionGate
+[ RUN      ] RegressionGate.IdenticalPredictionsAreNotARegression
+[       OK ] RegressionGate.IdenticalPredictionsAreNotARegression (0 ms)
+[ RUN      ] RegressionGate.OneChangedPredictionIsDetectedAndNamed
+[       OK ] RegressionGate.OneChangedPredictionIsDetectedAndNamed (0 ms)
+[ RUN      ] RegressionGate.NamesTheMostAffectedClassWhenSeveralChange
+[       OK ] RegressionGate.NamesTheMostAffectedClassWhenSeveralChange (0 ms)
+[ RUN      ] RegressionGate.EmptyCorpusIsNotARegression
+[       OK ] RegressionGate.EmptyCorpusIsNotARegression (0 ms)
+[----------] 4 tests from RegressionGate (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 14 tests from 3 test suites ran. (0 ms total)
+[  PASSED  ] 14 tests.

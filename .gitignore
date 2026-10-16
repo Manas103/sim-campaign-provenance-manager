@@ -20,3 +20,13 @@ data/plots/*.png
 mining/mine_frames
 data/mining/
 data/mining_small/
+
+# approach_comparison/ extension: CMake build dirs and the generated
+# 20,000-sample corpus plus every run/mutation artifact the comparison and
+# regression-gate scripts produce. Regenerate with:
+#   cmake -S approach_comparison -B approach_comparison/build && cmake --build approach_comparison/build
+#   python3 approach_comparison/python/corpus.py approach_comparison/data/corpus.tsv approach_comparison/data/manifest.json 20000 1
+#   approach_comparison/build/predicate_cli run approach_comparison/data/corpus.tsv approach_comparison/data/predictions_predicates.tsv
+approach_comparison/build/
+approach_comparison/build-*/
+approach_comparison/data/

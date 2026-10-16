@@ -1,0 +1,27 @@
+baseline run complete
+mutation 0: detected=True failing_class=hard_brake
+mutation 1: detected=True failing_class=hard_brake
+mutation 2: detected=True failing_class=none
+mutation 3: detected=True failing_class=high_acceleration
+mutation 4: detected=True failing_class=close_proximity
+mutation 5: detected=True failing_class=merge
+mutation 6: detected=True failing_class=cyclist_vehicle_close_approach
+mutation 7: detected=True failing_class=cyclist_vehicle_close_approach
+mutation 8: detected=True failing_class=merge
+mutation 9: detected=True failing_class=none
+mutation 10: detected=True failing_class=none
+mutation 11: detected=True failing_class=none
+mutation 12: detected=True failing_class=none
+mutation 13: detected=True failing_class=lane_change
+mutation 14: detected=True failing_class=cut_in
+mutation 15: detected=True failing_class=merge
+mutation 16: detected=True failing_class=cut_in
+mutation 17: detected=True failing_class=lane_change
+mutation 18: detected=True failing_class=merge
+mutation 19: detected=True failing_class=cyclist_vehicle_close_approach
+mutation 20: detected=True failing_class=lane_change
+mutation 21: detected=True failing_class=merge
+mutation 22: detected=True failing_class=merge
+mutation 23: detected=True failing_class=cyclist_vehicle_close_approach
+SEEDED_REGRESSIONS_CAUGHT=24/24
+FALSE_ALARMS_OVER_UNCHANGED_RUNS=0/50

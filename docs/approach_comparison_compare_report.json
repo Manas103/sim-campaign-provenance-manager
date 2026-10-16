@@ -1,0 +1,234 @@
+{
+  "test_split_size": 6000,
+  "train_split_size": 14000,
+  "results": {
+    "hand_written_predicates": {
+      "overall": {
+        "precision": 0.3596228032576082,
+        "recall": 0.49411071849234395,
+        "tp": 839,
+        "fp": 1494,
+        "fn": 859
+      },
+      "per_class": {
+        "lane_change": {
+          "precision": 0.3167420814479638,
+          "recall": 0.3684210526315789,
+          "tp": 70,
+          "fp": 151,
+          "fn": 120
+        },
+        "crossing_paths": {
+          "precision": 0.3968253968253968,
+          "recall": 0.6476683937823834,
+          "tp": 125,
+          "fp": 190,
+          "fn": 68
+        },
+        "unprotected_left": {
+          "precision": 0.1620795107033639,
+          "recall": 0.6022727272727273,
+          "tp": 106,
+          "fp": 548,
+          "fn": 70
+        },
+        "cut_in": {
+          "precision": 0.3760330578512397,
+          "recall": 0.4527363184079602,
+          "tp": 91,
+          "fp": 151,
+          "fn": 110
+        },
+        "hard_brake": {
+          "precision": 0.877906976744186,
+          "recall": 0.8118279569892473,
+          "tp": 151,
+          "fp": 21,
+          "fn": 35
+        },
+        "close_proximity": {
+          "precision": 0.1572052401746725,
+          "recall": 0.18947368421052632,
+          "tp": 36,
+          "fp": 193,
+          "fn": 154
+        },
+        "merge": {
+          "precision": 0.46153846153846156,
+          "recall": 0.03278688524590164,
+          "tp": 6,
+          "fp": 7,
+          "fn": 177
+        },
+        "high_acceleration": {
+          "precision": 0.541958041958042,
+          "recall": 0.8072916666666666,
+          "tp": 155,
+          "fp": 131,
+          "fn": 37
+        },
+        "cyclist_vehicle_close_approach": {
+          "precision": 0.4925373134328358,
+          "recall": 0.5294117647058824,
+          "tp": 99,
+          "fp": 102,
+          "fn": 88
+        }
+      },
+      "compute_time_s": 0.02581310000095982
+    },
+    "kinematic_trigger": {
+      "overall": {
+        "precision": 0.1497005988023952,
+        "recall": 0.4122497055359246,
+        "tp": 700,
+        "fp": 3976,
+        "fn": 998
+      },
+      "per_class": {
+        "lane_change": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 190
+        },
+        "crossing_paths": {
+          "precision": 0.05748619681714842,
+          "recall": 0.917098445595855,
+          "tp": 177,
+          "fp": 2902,
+          "fn": 16
+        },
+        "unprotected_left": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 176
+        },
+        "cut_in": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 201
+        },
+        "hard_brake": {
+          "precision": 0.5922330097087378,
+          "recall": 0.9838709677419355,
+          "tp": 183,
+          "fp": 126,
+          "fn": 3
+        },
+        "close_proximity": {
+          "precision": 0.18245967741935484,
+          "recall": 0.9526315789473684,
+          "tp": 181,
+          "fp": 811,
+          "fn": 9
+        },
+        "merge": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 183
+        },
+        "high_acceleration": {
+          "precision": 0.5371621621621622,
+          "recall": 0.828125,
+          "tp": 159,
+          "fp": 137,
+          "fn": 33
+        },
+        "cyclist_vehicle_close_approach": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 187
+        }
+      },
+      "compute_time_s": 0.001324099997873418
+    },
+    "gradient_boosted_classifier": {
+      "overall": {
+        "precision": 0.6029919447640967,
+        "recall": 0.6171967020023557,
+        "tp": 1048,
+        "fp": 690,
+        "fn": 650
+      },
+      "per_class": {
+        "lane_change": {
+          "precision": 0.4585635359116022,
+          "recall": 0.4368421052631579,
+          "tp": 83,
+          "fp": 98,
+          "fn": 107
+        },
+        "crossing_paths": {
+          "precision": 0.6318681318681318,
+          "recall": 0.5958549222797928,
+          "tp": 115,
+          "fp": 67,
+          "fn": 78
+        },
+        "unprotected_left": {
+          "precision": 0.5851063829787234,
+          "recall": 0.625,
+          "tp": 110,
+          "fp": 78,
+          "fn": 66
+        },
+        "cut_in": {
+          "precision": 0.5679012345679012,
+          "recall": 0.6865671641791045,
+          "tp": 138,
+          "fp": 105,
+          "fn": 63
+        },
+        "hard_brake": {
+          "precision": 0.9834254143646409,
+          "recall": 0.956989247311828,
+          "tp": 178,
+          "fp": 3,
+          "fn": 8
+        },
+        "close_proximity": {
+          "precision": 0.39344262295081966,
+          "recall": 0.37894736842105264,
+          "tp": 72,
+          "fp": 111,
+          "fn": 118
+        },
+        "merge": {
+          "precision": 0.3197278911564626,
+          "recall": 0.2568306010928962,
+          "tp": 47,
+          "fp": 100,
+          "fn": 136
+        },
+        "high_acceleration": {
+          "precision": 0.9086294416243654,
+          "recall": 0.9322916666666666,
+          "tp": 179,
+          "fp": 18,
+          "fn": 13
+        },
+        "cyclist_vehicle_close_approach": {
+          "precision": 0.5338983050847458,
+          "recall": 0.6737967914438503,
+          "tp": 126,
+          "fp": 110,
+          "fn": 61
+        }
+      },
+      "compute_time_s": 24.534815699997125
+    }
+  },
+  "compute_ratio_gbm_over_predicates": 950.4792411250426,
+  "gbm_train_time_s": 24.487046200003533,
+  "gbm_predict_time_s": 0.047769499993592035
+}

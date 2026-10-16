@@ -1,0 +1,12 @@
+wrote 20000 samples to data/corpus.tsv
+manifest content_sha256=163691faf3d957fc566d578f17478ec570d4a41c8fc8e7e2ec0f2c329d91b3a3
+  close_proximity: 666
+  crossing_paths: 666
+  cut_in: 666
+  cyclist_vehicle_close_approach: 666
+  hard_brake: 666
+  high_acceleration: 666
+  lane_change: 666
+  merge: 666
+  none: 14006
+  unprotected_left: 666

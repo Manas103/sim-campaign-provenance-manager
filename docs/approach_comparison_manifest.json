@@ -1,0 +1,6 @@
+{
+  "n": 20000,
+  "seed": 1,
+  "generator": "approach_comparison/python/corpus.py",
+  "content_sha256": "163691faf3d957fc566d578f17478ec570d4a41c8fc8e7e2ec0f2c329d91b3a3"
+}

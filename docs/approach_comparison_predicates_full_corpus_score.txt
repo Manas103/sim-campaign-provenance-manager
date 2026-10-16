@@ -1,0 +1,10 @@
+lane_change: precision=0.2962 recall=0.3393 tp=226 fp=537 fn=440
+crossing_paths: precision=0.4096 recall=0.6396 tp=426 fp=614 fn=240
+unprotected_left: precision=0.1844 recall=0.5766 tp=384 fp=1698 fn=282
+cut_in: precision=0.3970 recall=0.4775 tp=318 fp=483 fn=348
+hard_brake: precision=0.8962 recall=0.8168 tp=544 fp=63 fn=122
+close_proximity: precision=0.1842 recall=0.2207 tp=147 fp=651 fn=519
+merge: precision=0.4255 recall=0.0300 tp=20 fp=27 fn=646
+high_acceleration: precision=0.5470 recall=0.7868 tp=524 fp=434 fn=142
+cyclist_vehicle_close_approach: precision=0.4826 recall=0.5195 tp=346 fp=371 fn=320
+OVERALL: precision=0.3757 recall=0.4897 tp=2935 fp=4878 fn=3059

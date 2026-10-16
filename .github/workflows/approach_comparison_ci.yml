@@ -1,0 +1,36 @@
+name: approach_comparison CI
+
+on:
+  push:
+    paths:
+      - "approach_comparison/**"
+      - ".github/workflows/approach_comparison_ci.yml"
+  pull_request:
+    paths:
+      - "approach_comparison/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure and build (CMake + GoogleTest)
+        run: |
+          cmake -S approach_comparison -B approach_comparison/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build approach_comparison/build -j2
+
+      - name: Run GoogleTest suite
+        run: ./approach_comparison/build/approach_comparison_tests
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate the manifest-pinned corpus and run the regression gate
+        working-directory: approach_comparison
+        run: |
+          python3 python/corpus.py data/corpus.tsv data/manifest.json 20000 1
+          ./build/predicate_cli run data/corpus.tsv data/predictions_predicates.tsv
+          python3 python/run_seeded_regressions.py "$(pwd)/data/corpus.tsv" "$(pwd)/build/predicate_cli"

@@ -1,0 +1,6 @@
+test_split_size=6000 train_split_size=14000
+hand_written_predicates: precision=0.3596 recall=0.4941 compute_time_s=0.0258
+kinematic_trigger: precision=0.1497 recall=0.4122 compute_time_s=0.0013
+gradient_boosted_classifier: precision=0.6030 recall=0.6172 compute_time_s=24.5348
+GBM_TRAIN_TIME_S=24.4870 GBM_PREDICT_TIME_S=0.0478
+COMPUTE_RATIO_GBM_OVER_PREDICATES=950.48x
