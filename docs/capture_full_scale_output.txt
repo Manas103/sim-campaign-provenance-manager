@@ -1,0 +1,25 @@
+{
+  "total_ticks": 610000,
+  "num_segments": 61,
+  "ticks_per_segment": 10000,
+  "simulated_frame_count": 2019355,
+  "indexed_frame_count": 2003350,
+  "dropped_by_topic": {
+    "battery_status": 186,
+    "camera_front": 1840,
+    "camera_left": 895,
+    "camera_rear": 1813,
+    "camera_right": 667,
+    "gps": 1116,
+    "imu": 3050,
+    "lidar_top": 834,
+    "radar_front": 1246,
+    "radar_rear": 1415,
+    "ultrasonic_array": 1043,
+    "wheel_odometry": 1900
+  },
+  "simulate_elapsed_s": 1.565,
+  "write_and_index_elapsed_s": 1.769,
+  "db_path": "data\\capture\\segment_index.sqlite",
+  "segments_dir": "data\\capture\\segments"
+}

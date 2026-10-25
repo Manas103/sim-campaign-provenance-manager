@@ -30,3 +30,9 @@ data/mining_small/
 approach_comparison/build/
 approach_comparison/build-*/
 approach_comparison/data/
+
+# capture/ extension: the generated 2,000,000+-frame Parquet corpus, its SQLite segment
+# index, and the 40-scenario replay-gate corpus. Regenerate with:
+#   python3 scripts/capture_full_scale.py --out-dir data/capture --seed 11
+#   python3 scripts/replay_regression_gate_run.py --out-dir data/capture/gate --seed 7
+data/capture/

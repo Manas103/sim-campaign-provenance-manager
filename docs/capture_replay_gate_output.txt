@@ -1,0 +1,59 @@
+{
+  "num_gate_scenarios": 40,
+  "determinism": {
+    "matching_replays": 500,
+    "total_replays": 500,
+    "reference_combined_digest": "3a33232115cccf7874aefad79f52b862be9fde556e8a99b4b575e807ef1504fe"
+  },
+  "regression_catching": {
+    "num_seeded_regressions": 40,
+    "num_caught": 40,
+    "uncaught_scenarios": [],
+    "named_scenarios": [
+      "gate_scenario_000",
+      "gate_scenario_001",
+      "gate_scenario_002",
+      "gate_scenario_003",
+      "gate_scenario_004",
+      "gate_scenario_005",
+      "gate_scenario_006",
+      "gate_scenario_007",
+      "gate_scenario_008",
+      "gate_scenario_009",
+      "gate_scenario_010",
+      "gate_scenario_011",
+      "gate_scenario_012",
+      "gate_scenario_013",
+      "gate_scenario_014",
+      "gate_scenario_015",
+      "gate_scenario_016",
+      "gate_scenario_017",
+      "gate_scenario_018",
+      "gate_scenario_019",
+      "gate_scenario_020",
+      "gate_scenario_021",
+      "gate_scenario_022",
+      "gate_scenario_023",
+      "gate_scenario_024",
+      "gate_scenario_025",
+      "gate_scenario_026",
+      "gate_scenario_027",
+      "gate_scenario_028",
+      "gate_scenario_029",
+      "gate_scenario_030",
+      "gate_scenario_031",
+      "gate_scenario_032",
+      "gate_scenario_033",
+      "gate_scenario_034",
+      "gate_scenario_035",
+      "gate_scenario_036",
+      "gate_scenario_037",
+      "gate_scenario_038",
+      "gate_scenario_039"
+    ]
+  },
+  "false_trips": {
+    "num_false_tripped": 0,
+    "num_reruns": 50
+  }
+}

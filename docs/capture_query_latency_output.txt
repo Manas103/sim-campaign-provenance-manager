@@ -1,0 +1,8 @@
+{
+  "num_queries": 2000,
+  "total_matches_returned": 12200,
+  "mean_ms": 0.0321,
+  "p50_ms": 0.0307,
+  "p99_ms": 0.0495,
+  "max_ms": 0.128
+}

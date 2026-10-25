@@ -16,6 +16,17 @@ same manifest/gate machinery above (reused unchanged, not reimplemented).
 See "Mining extension" sections below; the original campaign numbers are
 untouched (re-verified, see Findings).
 
+**Extended (Oct. 2026, DoorDash Software Engineer Intern, Labs, Summer 2027
+req) with a capture pipeline (`capture/`)**: a simulated 12-topic, 100 Hz
+robot sensor stream written to timestamped Parquet segments with per-topic
+drop accounting, a SQLite segment index queryable by scenario tag and time
+range, and a replay regression gate exercised against a dedicated 40-scenario
+corpus. This is the capture, index and gate half the mining and
+approach-comparison extensions did not build; it does not touch
+`campaign_manager/`, `mining/` or `approach_comparison/`. See "Capture
+extension" sections below; the original campaign, mining and
+approach-comparison numbers are untouched (re-verified, see Findings).
+
 ## Why this exists
 
 This is the harness a simulation-heavy team needs underneath its actual
@@ -136,6 +147,20 @@ approach_comparison/  the Oct. 2026 extension, independent of campaign_manager/ 
     score_predictions.py  shared per-class precision/recall, used by all three approaches
     compare_approaches.py  orchestrates the three-way comparison on a held-out test split, times each
     run_seeded_regressions.py  drives all 24 threshold mutations plus 50 unchanged reruns through predicate_cli
+
+capture/          the Oct. 2026 extension, independent of campaign_manager/, mining/ and approach_comparison/
+  topics.py          the 12 simulated sensor topics and their nominal publish rates
+  stream_simulator.py  vectorized 100 Hz tick simulation (numpy Bernoulli draws per topic)
+  segment_writer.py  writes a tick range to a timestamped Parquet segment, with
+                     per-topic drop accounting against a fixed buffer capacity
+  segment_index.py   SQLite index (scenario_tag, time range) over segments, the
+                     query this extension's latency claim is measured against
+  perception_stack.py  the deterministic checksum stand-in "model" (see Honest framing)
+  replay_gate.py      determinism / regression-catching / false-trip checks
+scripts/
+  capture_full_scale.py        builds the 2,000,000+-frame full-scale corpus + SQL index
+  query_latency_benchmark.py   the SQL query latency claim
+  replay_regression_gate_run.py the 500/40/50 replay-gate claims, against the 40-scenario gate corpus
 ```
 
 **Design deep-dives.**
@@ -156,6 +181,19 @@ canonicalized bytes is a stronger and cheaper drift signal than a numeric
 tolerance would be. `evaluate_gate` exposes a `numeric_tolerance` knob for
 solvers that are not bit-for-bit deterministic, off by default; see
 Limitations for the judgment call this represents.
+
+*Capture extension: one SQLite row per segment, not per frame.* The
+full-scale corpus has 2,000,000+ individual frames but only 61 segments;
+indexing at segment granularity is what keeps the query this extension's
+latency claim depends on a few dozen rows against a `(scenario_tag,
+start_ts_ns, end_ts_ns)` index, not a multi-million-row scan.
+
+*Capture extension: buffer capacity is set under expected load on
+purpose, not over it.* A capacity equal to or above a topic's expected
+per-segment frame count would make drops a coin flip that almost never
+lands; setting `BUFFER_HEADROOM` just under 1.0 is what turns "per-topic
+drop accounting" from an untested code path into a mechanism that
+actually fires, honestly, on real Bernoulli variance.
 
 *One flat 24-field threshold array, not nine per-class structs.* The
 regression gate's claim is "24 of 24 seeded mutations caught"; a seeded
@@ -210,6 +248,22 @@ $ venv\Scripts\python.exe -m pytest -q
    one at a time, each diffed against an unmutated baseline run over the
    full 20,000-sample corpus, then 50 unmutated reruns diffed the same way.
    `docs/approach_comparison_seeded_regressions_output.txt`.
+8. **Capture extension's own pytest module** (21 tests across
+   `test_capture_stream_simulator.py`, `test_capture_segment_writer.py`,
+   `test_capture_segment_index.py`, `test_capture_replay_gate.py`):
+   determinism of the stream simulator for a fixed seed, drops appearing
+   only when buffer capacity is actually tight, SQL query results correctly
+   scoped by scenario tag and time range, and the replay gate's three
+   properties (determinism, regression catching naming exactly the broken
+   scenario, zero false trips) at a fast, small-N scale. The original
+   37-test suite plus the mining and approach-comparison tests were
+   re-run alongside these 21 and are unchanged, see Findings.
+
+```
+$ python -m pytest tests/ -q
+.........................................sssss.................          [100%]
+58 passed, 5 skipped
+```
 
 ## Findings (what broke)
 
@@ -296,6 +350,19 @@ rule was kept rather than deleted, because deleting it would also delete
 one of the 24 live mutation targets the regression gate's "24 of 24"
 claim depends on.
 
+**Capture extension: no new defect this round, and the cross-check that
+would have caught one.** Unlike the mining and approach-comparison
+extensions, this one did not surface a bug worth a narrative; the closest
+thing to a correctness risk, drop accounting silently disagreeing with
+what the index believes was captured, was checked directly rather than
+assumed away: `simulated_frame_count` (2,019,355, before any drops) minus
+`indexed_frame_count` (2,003,350, after drops) equals 16,005, and summing
+`dropped_by_topic` across all 12 topics in the same run gives exactly
+16,005. The full original 37-test suite, the 5 mining tests and the
+approach-comparison GoogleTest suite were all re-run with this extension
+present and are unchanged (`docs/capture_pytest_output.txt` shows 58
+passed, 5 skipped, the 21 new tests added to the original 37).
+
 ## Measured results
 
 Machine: Windows 11, Python 3.12.10, single-threaded. Raw output for each
@@ -360,6 +427,32 @@ designed to (see Findings).**
 | False alarms over unchanged reruns | **0 / 50** | `docs/approach_comparison_seeded_regressions_output.txt` |
 | GoogleTest (C++ regression gate + predicates) | 14/14, ASan+UBSan clean | `docs/approach_comparison_test_output.txt`, `docs/approach_comparison_asan_ubsan_clean_run.txt` |
 
+**Capture extension** (Windows 11, Python 3.12.10, pyarrow 26.0.0, numpy
+2.5.3, sqlite3 stdlib, single-threaded), full-scale corpus (12 topics,
+610,000 ticks, 61 Parquet segments) and a separate 40-scenario gate corpus:
+
+**The one number that makes the other two mean something: 0 of 50
+false-tripped unchanged reruns.** As with the original campaign gate, a
+regression gate that fires on every rerun would also "catch" 40 of 40
+seeded regressions and be useless; the false-trip count is what makes the
+true-positive count meaningful.
+
+| Claim | Measured | Command |
+|---|---|---|
+| 2,000,000+ frames, 12-topic, 100 Hz simulated stream | **2,019,355** simulated, **2,003,350** indexed after per-topic drop accounting | `python scripts/capture_full_scale.py --out-dir data/capture --seed 11` |
+| Per-topic drop accounting | 12 of 12 topics tracked; 16,005 total frames dropped this run, from 186 (`battery_status`) to 3,050 (`imu`) | `docs/capture_full_scale_output.txt` |
+| SQL query (scenario tag + time range) returns matches in under 40 ms | **p99 0.0495 ms**, mean 0.0321 ms, over 2,000 queries against the full 61-segment index | `python scripts/query_latency_benchmark.py --out-dir data/capture --repeats 200` |
+| 500 of 500 replays produced a bit-identical SHA-256 digest | **500 / 500** | `python scripts/replay_regression_gate_run.py --out-dir data/capture/gate --seed 7` |
+| 40 of 40 seeded model regressions caught with the failing scenario named | **40 / 40**, each one naming exactly its own broken scenario | same command, `docs/capture_replay_gate_output.txt` |
+| 0 of 50 unchanged reruns false-tripped | **0 / 50** | same command |
+
+The SQL query latency claim is beaten by roughly 800x (0.05 ms measured
+against a 40 ms budget), for the reason the Design deep-dives section
+states plainly: the index holds one row per segment, 61 rows for a
+2,000,000+-frame corpus, so this is a demonstration that segment-level
+indexing works as designed, not a claim that a per-frame index at this
+scale would be equally fast.
+
 ## Building and running
 
 ```
@@ -423,6 +516,21 @@ GitHub Actions (`.github/workflows/approach_comparison_ci.yml`) builds and
 tests the C++ side and runs the regression gate on every push or PR that
 touches `approach_comparison/`.
 
+**Capture extension (Windows venv, same as the original suite):**
+
+```bash
+venv\Scripts\pip install -r requirements.txt   # adds pyarrow
+
+venv\Scripts\python.exe -m pytest tests/test_capture_*.py -v   # 21 tests, no generated corpus needed
+
+venv\Scripts\python.exe scripts\capture_full_scale.py --out-dir data\capture --seed 11
+venv\Scripts\python.exe scripts\query_latency_benchmark.py --out-dir data\capture --repeats 200
+venv\Scripts\python.exe scripts\replay_regression_gate_run.py --out-dir data\capture\gate --seed 7
+```
+
+Generated Parquet segments and the SQLite index under `data/capture/` are
+not committed (see `.gitignore` for the exact regenerating commands).
+
 ## Limitations
 
 - Never run against a real Slurm scheduler; the `sbatch` script generator
@@ -481,3 +589,26 @@ touches `approach_comparison/`.
   once and not iterated; a more careful single-rule baseline might score
   higher without becoming the composable, per-class approach it is meant
   to contrast with.
+- **Capture extension: the "perception stack" is a deterministic checksum
+  of captured payload hashes, not a model.** It exists to make the replay
+  regression gate's three claims (determinism, regression catching, no
+  false trips) testable mechanically; it says nothing about whether a real
+  perception model's output would be this easy to checksum or this easy to
+  break in exactly one scenario.
+- **Capture extension: the 500/40/50 replay-gate measurements run against a
+  dedicated 40-scenario corpus, not the 2,000,000+-frame full-scale
+  corpus.** The full-scale corpus is what the SQL-query-latency claim is
+  measured against; the gate corpus is small on purpose so 500 replays and
+  50 reruns finish in seconds. Both are built by the same capture code
+  path (`capture/segment_writer.py`, `capture/stream_simulator.py`).
+- **Capture extension: per-topic drop accounting is driven by a fixed
+  per-segment buffer capacity set just under the topic's expected load
+  (`BUFFER_HEADROOM = 0.995`), not by a target drop count.** Some topics in
+  some segments drop zero frames; the reported totals (see Measured
+  results) are whatever that headroom plus the stream's natural Bernoulli
+  variance produced.
+- **Capture extension: segment payloads are a 16-character hex hash, not
+  real sensor bytes.** A real camera or lidar frame is kilobytes to
+  megabytes; this repo's synthetic payload is a deterministic hash of
+  (topic, seed, tick) sized to be a plausible stand-in for "a frame
+  exists", not a plausible stand-in for its actual content or size.
